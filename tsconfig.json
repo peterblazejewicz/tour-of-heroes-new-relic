@@ -21,7 +21,14 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./@types"
+    ],
+    "types": [
+      "new-relic-browser"
+    ],
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
