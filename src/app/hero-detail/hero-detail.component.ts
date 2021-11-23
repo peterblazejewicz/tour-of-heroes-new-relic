@@ -35,8 +35,16 @@ export class HeroDetailComponent implements OnInit {
 
   save(): void {
     if (this.hero) {
-      this.heroService.updateHero(this.hero)
-        .subscribe(() => this.goBack());
+      newrelic.addPageAction("update-hero", {
+        heroId: this.hero.id,
+        hero: this.hero.name,
+      });
+      newrelic.addToTrace({
+        name: "update-hero-event",
+        start: Date.now(),
+        origin: "hero-detail.component",
+      });
+      this.heroService.updateHero(this.hero).subscribe(() => this.goBack());
     }
   }
 }

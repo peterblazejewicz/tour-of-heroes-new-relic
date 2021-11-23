@@ -6,6 +6,7 @@ import {
   RoutesRecognized,
 } from "@angular/router";
 import { distinctUntilChanged, filter } from "rxjs/operators";
+import { HeroService } from "./hero.service";
 
 @Component({
   selector: "app-root",
@@ -14,7 +15,12 @@ import { distinctUntilChanged, filter } from "rxjs/operators";
 })
 export class AppComponent {
   title = "Tour of Heroes";
-  constructor(private router: Router, private activeRoute: ActivatedRoute) {
+
+  constructor(
+    private router: Router,
+    private activeRoute: ActivatedRoute,
+    heroService: HeroService
+  ) {
     router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -35,5 +41,12 @@ export class AppComponent {
         const { pageViewName } = routeData;
         pageViewName && newrelic.setPageViewName(pageViewName);
       });
+    heroService.getRandomHero().subscribe((hero) => {
+      const currentHero = hero;
+      if(currentHero){
+        newrelic.setCustomAttribute("user", currentHero.name);
+        newrelic.setCustomAttribute("userId", currentHero.id);
+      }
+    });
   }
 }

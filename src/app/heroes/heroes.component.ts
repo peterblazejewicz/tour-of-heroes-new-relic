@@ -32,7 +32,16 @@ export class HeroesComponent implements OnInit {
   }
 
   delete(hero: Hero): void {
-    this.heroes = this.heroes.filter(h => h !== hero);
+    newrelic.addPageAction("delete-hero", {
+      id: hero.id,
+      name: hero.name,
+    });
+    newrelic.addToTrace({
+      name: "delete-hero-event",
+      start: Date.now(),
+      origin: "heroes.component",
+    });
+    this.heroes = this.heroes.filter((h) => h !== hero);
     this.heroService.deleteHero(hero.id).subscribe();
   }
 
